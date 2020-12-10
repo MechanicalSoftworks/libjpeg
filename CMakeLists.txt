@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
 
-project(terapixel
+project(libjpeg
     LANGUAGES C CXX)
 
 if(NOT ${CMAKE_SIZEOF_VOID_P} EQUAL 8)
