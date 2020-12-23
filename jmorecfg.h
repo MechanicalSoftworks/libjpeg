@@ -19,9 +19,9 @@
  * JPEG standard, and the IJG code does not support anything else!
  * We do not support run-time selection of data precision, sorry.
  */
-
+#ifndef BITS_IN_JSAMPLE
 #define BITS_IN_JSAMPLE  8	/* use 8 or 12 */
-
+#endif
 
 /*
  * Maximum number of components (color channels) allowed in JPEG image.

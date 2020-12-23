@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.17)
 
 project(libjpeg
     LANGUAGES C CXX)
+	
+OPTION(ENABLE_12_BIT_SUPPORT "Build with support for 12-bit images. Mutally exclusive with 8-bit support." OFF)
 
 if(NOT ${CMAKE_SIZEOF_VOID_P} EQUAL 8)
     message("Please switch to x64 build.")
@@ -29,6 +31,12 @@ target_link_libraries(cjpeg	libjpeg)
 
 add_executable(djpeg ${DJPEGSOURCES})
 target_link_libraries(djpeg	libjpeg)
+
+if (ENABLE_12_BIT_SUPPORT)
+	add_compile_definitions(BITS_IN_JSAMPLE=12)
+else()
+	add_compile_definitions(BITS_IN_JSAMPLE=8)
+endif()
 
 if (MSVC)
 	configure_file("jconfig.vc" "${CMAKE_CURRENT_SOURCE_DIR}/jconfig.h" COPYONLY)
