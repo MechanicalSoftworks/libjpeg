@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.17)
 
 project(libjpeg
     LANGUAGES C CXX)
-	
+
 OPTION(ENABLE_12_BIT_SUPPORT "Build with support for 12-bit images. Mutally exclusive with 8-bit support." OFF)
 
 if(NOT ${CMAKE_SIZEOF_VOID_P} EQUAL 8)
@@ -17,24 +17,31 @@ set (LIBSOURCES jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c
 	jdinput.c jdmainct.c jdmarker.c jdmaster.c jdmerge.c jdphuff.c
 	jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c
 	jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c
-	jquant2.c jutils.c jmemmgr.c jmemansi.c jinclude.h jconfig.h 
+	jquant2.c jutils.c jmemmgr.c jmemansi.c jinclude.h jconfig.h
 	jpeglib.h jmorecfg.h jpegint.h jerror.h
 )
 
 set (CJPEGSOURCES cjpeg.c cdjpeg.c transupp.c rdswitch.c rdppm.c rdgif.c rdtarga.c rdbmp.c rdrle.c)
 set (DJPEGSOURCES djpeg.c cdjpeg.c transupp.c rdcolmap.c wrppm.c wrgif.c wrtarga.c wrbmp.c wrrle.c)
 
-add_library(libjpeg STATIC ${LIBSOURCES})
+if (MSVC)
+	set(LIBNAME libjpeg)
+else()
+	set(LIBNAME jpeg)
+endif()
 
-add_executable(cjpeg ${CJPEGSOURCES})
-target_link_libraries(cjpeg	libjpeg)
-
-add_executable(djpeg ${DJPEGSOURCES})
-target_link_libraries(djpeg	libjpeg)
+add_library(${LIBNAME} STATIC ${LIBSOURCES})
+set_property(TARGET ${LIBNAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 if (ENABLE_12_BIT_SUPPORT)
 	add_compile_definitions(BITS_IN_JSAMPLE=12)
 else()
+	add_executable(cjpeg ${CJPEGSOURCES})
+	target_link_libraries(cjpeg	${LIBNAME})
+
+	add_executable(djpeg ${DJPEGSOURCES})
+	target_link_libraries(djpeg	${LIBNAME})
+
 	add_compile_definitions(BITS_IN_JSAMPLE=8)
 endif()
 
