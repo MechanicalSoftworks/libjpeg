@@ -5,11 +5,7 @@ project(libjpeg
 	VERSION "6.1"
 )
 
-if (MSVC)
-	set(LIBNAME "libjpeg")
-else()
-	set(LIBNAME "jpeg")
-endif()
+set(LIBNAME "jpeg")
 
 function(MakeLibrary libname jsample_bits)
 	set(LIBTARGET "${libname}${jsample_bits}")
@@ -28,6 +24,10 @@ function(MakeLibrary libname jsample_bits)
 
 	add_library(${LIBTARGET} STATIC ${SOURCE_LIST} ${HEADER_LIST})
 	set_property(TARGET ${LIBTARGET} PROPERTY POSITION_INDEPENDENT_CODE ON)
+	set_target_properties(${LIBTARGET} PROPERTIES
+		POSITION_INDEPENDENT_CODE ON
+		OUTPUT_NAME ${LIBTARGET}
+	)
 	target_compile_definitions(${LIBTARGET} PUBLIC BITS_IN_JSAMPLE=${jsample_bits})
 
 	if("${jsample_bits}" MATCHES "8")
