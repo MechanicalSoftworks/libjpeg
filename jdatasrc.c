@@ -18,6 +18,7 @@
 #include "jinclude.h"
 #include "jpeglib.h"
 #include "jerror.h"
+#include <fcntl.h>
 
 
 /* Expanded data source object for stdio input */
