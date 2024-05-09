@@ -19,8 +19,10 @@
 #include "jpeglib.h"
 #include "jerror.h"
 #include <fcntl.h>
-#include <unistd.h>
 
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 /* Expanded data source object for stdio input */
 
@@ -227,27 +229,27 @@ GLOBAL(FILE*) jpeg_fopen_no_inherit(const char* path, const char* mode)
   int flags = 0;
   int fd = 0;
   
-  if(!strncmp(mode, "r", 1))
+  if(!strcmp(mode, "r") || !strcmp(mode, "rb"))
   {
     flags = O_RDONLY;
   }
-  else if(!strncmp(mode, "w", 1))
+  else if(!strcmp(mode, "w") || !strcmp(mode, "wb"))
   {
     flags = O_WRONLY | O_CREAT | O_TRUNC;
   }
-  else if(!strncmp(mode, "a", 1))
+  else if(!strcmp(mode, "a") || !strcmp(mode, "ab"))
   {
     flags = O_WRONLY | O_CREAT | O_APPEND;
   }
-  else if(!strncmp(mode, "r+", 2))
+  else if(!strcmp(mode, "r+") || !strcmp(mode, "rb+") || !strcmp(mode, "r+b"))
   {
     flags = O_RDWR;
   }
-  else if(!strncmp(mode, "w+", 2))
+  else if(!strcmp(mode, "w+") || !strcmp(mode, "wb+") || !strcmp(mode, "w+b"))
   {
     flags = O_RDWR | O_CREAT | O_TRUNC;
   }
-  else if(!strncmp(mode, "a+", 2))
+  else if(!strcmp(mode, "a+") || !strcmp(mode, "ab+") || !strcmp(mode, "a+b"))
   {
     flags = O_RDWR | O_CREAT | O_APPEND;
   }
