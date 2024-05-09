@@ -19,6 +19,7 @@
 #include "jpeglib.h"
 #include "jerror.h"
 #include <fcntl.h>
+#include <unistd.h>
 
 
 /* Expanded data source object for stdio input */
@@ -222,30 +223,31 @@ GLOBAL(FILE*) jpeg_fopen_no_inherit(const char* path, const char* mode)
 
   return fopen(path, m);
 #else
+  FILE* f = NULL;
   int flags = 0;
   int fd = 0;
-
-  if(!strcmp(mode, "r"))
+  
+  if(!strncmp(mode, "r", 1))
   {
     flags = O_RDONLY;
   }
-  else if(!strcmp(mode, "w"))
+  else if(!strncmp(mode, "w", 1))
   {
     flags = O_WRONLY | O_CREAT | O_TRUNC;
   }
-  else if(!strcmp(mode, "a"))
+  else if(!strncmp(mode, "a", 1))
   {
     flags = O_WRONLY | O_CREAT | O_APPEND;
   }
-  else if(!strcmp(mode, "r+"))
+  else if(!strncmp(mode, "r+", 2))
   {
     flags = O_RDWR;
   }
-  else if(!strcmp(mode, "w+"))
+  else if(!strncmp(mode, "w+", 2))
   {
     flags = O_RDWR | O_CREAT | O_TRUNC;
   }
-  else if(!strcmp(mode, "a+"))
+  else if(!strncmp(mode, "a+", 2))
   {
     flags = O_RDWR | O_CREAT | O_APPEND;
   }
@@ -255,7 +257,12 @@ GLOBAL(FILE*) jpeg_fopen_no_inherit(const char* path, const char* mode)
   }
 
   fd = open(path, flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+  f = fdopen(fd, mode);
+  if (!f)
+  {
+    close(fd);
+  }
 
-  return fdopen(fd, mode);
+  return f;
 #endif
 }
