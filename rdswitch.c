@@ -87,7 +87,7 @@ read_quant_tables (j_compress_ptr cinfo, char * filename,
   long val;
   unsigned int table[DCTSIZE2];
 
-  if ((fp = fopen(filename, "r" NO_INHERIT)) == NULL) {
+  if ((fp = jpeg_fopen_no_inherit(filename, "r")) == NULL) {
     fprintf(stderr, "Can't open table file %s\n", filename);
     return FALSE;
   }
@@ -179,7 +179,7 @@ read_scan_script (j_compress_ptr cinfo, char * filename)
 #define MAX_SCANS  100		/* quite arbitrary limit */
   jpeg_scan_info scans[MAX_SCANS];
 
-  if ((fp = fopen(filename, "r" NO_INHERIT)) == NULL) {
+  if ((fp = jpeg_fopen_no_inherit(filename, "r")) == NULL) {
     fprintf(stderr, "Can't open scan definition file %s\n", filename);
     return FALSE;
   }

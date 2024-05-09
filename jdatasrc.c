@@ -210,3 +210,51 @@ jpeg_stdio_src (j_decompress_ptr cinfo, FILE * infile)
   src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
   src->pub.next_input_byte = NULL; /* until buffer loaded */
 }
+
+GLOBAL(FILE*) jpeg_fopen_no_inherit(const char* path, const char* mode)
+{
+#ifdef _WIN32
+  char m[32];
+  strncpy(m, mode, sizeof(m) - 1);
+  strncat(m, "N", sizeof(m) - 1);
+  m[sizeof(m) - 1] = 0;
+
+  return fopen(path, m);
+#else
+  int flags = 0;
+  int fd = 0;
+
+  if(!strcmp(mode, "r"))
+  {
+    flags = O_RDONLY;
+  }
+  else if(!strcmp(mode, "w"))
+  {
+    flags = O_WRONLY | O_CREAT | O_TRUNC;
+  }
+  else if(!strcmp(mode, "a"))
+  {
+    flags = O_WRONLY | O_CREAT | O_APPEND;
+  }
+  else if(!strcmp(mode, "r+"))
+  {
+    flags = O_RDWR;
+  }
+  else if(!strcmp(mode, "w+"))
+  {
+    flags = O_RDWR | O_CREAT | O_TRUNC;
+  }
+  else if(!strcmp(mode, "a+"))
+  {
+    flags = O_RDWR | O_CREAT | O_APPEND;
+  }
+  else
+  {
+    return NULL;
+  }
+
+  fd = open(path, flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+
+  return fdopen(fd, mode);
+#endif
+}

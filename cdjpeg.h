@@ -165,12 +165,6 @@ EXTERN(FILE *) write_stdout JPP((void));
 #endif
 #endif
 
-#ifdef _WIN32
-#define NO_INHERIT "N"
-#else
-#define NO_INHERIT
-#endif
-
 #ifndef EXIT_FAILURE		/* define exit() codes if not provided */
 #define EXIT_FAILURE  1
 #endif
