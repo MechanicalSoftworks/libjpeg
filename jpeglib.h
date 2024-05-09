@@ -909,6 +909,7 @@ EXTERN(void) jpeg_destroy_decompress JPP((j_decompress_ptr cinfo));
 /* Caller is responsible for opening the file before and closing after. */
 EXTERN(void) jpeg_stdio_dest JPP((j_compress_ptr cinfo, FILE * outfile));
 EXTERN(void) jpeg_stdio_src JPP((j_decompress_ptr cinfo, FILE * infile));
+EXTERN(FILE*) jpeg_fopen_no_inherit JPP((const char* path, const char* mode));
 
 /* Default parameter setup for compression */
 EXTERN(void) jpeg_set_defaults JPP((j_compress_ptr cinfo));
@@ -1036,7 +1037,6 @@ EXTERN(void) jpeg_destroy JPP((j_common_ptr cinfo));
 /* Default restart-marker-resync procedure for use by data source modules */
 EXTERN(boolean) jpeg_resync_to_restart JPP((j_decompress_ptr cinfo,
 					    int desired));
-
 
 /* These marker codes are exported since applications and data source modules
  * are likely to want to use them.
