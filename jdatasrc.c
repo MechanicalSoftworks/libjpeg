@@ -226,32 +226,32 @@ GLOBAL(FILE*) jpeg_fopen_no_inherit(const char* path, const char* mode)
   return fopen(path, m);
 #else
   FILE* f = NULL;
-  int flags = 0;
+  int flags = O_CLOEXEC;
   int fd = 0;
   
   if(!strcmp(mode, "r") || !strcmp(mode, "rb"))
   {
-    flags = O_RDONLY;
+    flags |= O_RDONLY;
   }
   else if(!strcmp(mode, "w") || !strcmp(mode, "wb"))
   {
-    flags = O_WRONLY | O_CREAT | O_TRUNC;
+    flags |= O_WRONLY | O_CREAT | O_TRUNC;
   }
   else if(!strcmp(mode, "a") || !strcmp(mode, "ab"))
   {
-    flags = O_WRONLY | O_CREAT | O_APPEND;
+    flags |= O_WRONLY | O_CREAT | O_APPEND;
   }
   else if(!strcmp(mode, "r+") || !strcmp(mode, "rb+") || !strcmp(mode, "r+b"))
   {
-    flags = O_RDWR;
+    flags |= O_RDWR;
   }
   else if(!strcmp(mode, "w+") || !strcmp(mode, "wb+") || !strcmp(mode, "w+b"))
   {
-    flags = O_RDWR | O_CREAT | O_TRUNC;
+    flags |= O_RDWR | O_CREAT | O_TRUNC;
   }
   else if(!strcmp(mode, "a+") || !strcmp(mode, "ab+") || !strcmp(mode, "a+b"))
   {
-    flags = O_RDWR | O_CREAT | O_APPEND;
+    flags |= O_RDWR | O_CREAT | O_APPEND;
   }
   else
   {
