@@ -29,6 +29,12 @@ function(MakeLibrary libname jsample_bits)
 		OUTPUT_NAME ${LIBTARGET}
 	)
 	target_compile_definitions(${LIBTARGET} PUBLIC BITS_IN_JSAMPLE=${jsample_bits})
+	
+	target_include_directories(${LIBTARGET}
+		PUBLIC
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+		$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>
+	)
 
 	if("${jsample_bits}" MATCHES "8")
 		set_target_properties(${LIBTARGET} PROPERTIES PUBLIC_HEADER "${HEADER_LIST}")
