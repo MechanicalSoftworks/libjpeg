@@ -66,6 +66,8 @@ endfunction()
 MakeLibrary(${LIBNAME} "8")
 MakeLibrary(${LIBNAME} "12")
 
+add_library(JPEG::JPEG ALIAS jpeg8)
+
 set(CJPEG "cjpeg")
 set(DJPEG "djpeg")
 
