@@ -33,7 +33,7 @@ function(MakeLibrary libname jsample_bits)
 	target_include_directories(${LIBTARGET}
 		PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-		$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 	)
 
 	if("${jsample_bits}" MATCHES "8")
@@ -42,6 +42,10 @@ function(MakeLibrary libname jsample_bits)
 
 	install(TARGETS ${LIBTARGET}
 		EXPORT ${LIBTARGET}Targets
+		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/$<CONFIG>
+		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/$<CONFIG>
+		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/$<CONFIG>
+		PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	)
 
 	include(CMakePackageConfigHelpers)
@@ -85,4 +89,4 @@ else()
 	configure_file("jconfig.cfg" "${CMAKE_CURRENT_SOURCE_DIR}/jconfig.h" COPYONLY)
 endif()
 
-install(TARGETS ${CJPEG} ${DJPEG})
+install(TARGETS ${CJPEG} ${DJPEG} DESTINATION ${CMAKE_INSTALL_BINDIR}/$<CONFIG>)
